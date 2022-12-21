@@ -1,24 +1,22 @@
-import request from '@/utils/request'
+/**
+ * @Author: bzirs
+ * @Date: 2021-05-10 09:38:15
+ * @LastEditors: bzirs
+ * @LastEditTime: 2022-12-21 15:13:21
+ * @FilePath: /hm-vue2-hr/src/api/user.js
+ * @Description:
+ * @
+ * @Copyright (c) 2022 by bzirs, All Rights Reserved.
+ */
 
 export function login(data) {
-  return request({
-    url: '/vue-admin-template/user/login',
-    method: 'post',
-    data
-  })
+  return data
 }
 
 export function getInfo(token) {
-  return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { token }
-  })
+  return token
 }
 
 export function logout() {
-  return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
-  })
+  return
 }
