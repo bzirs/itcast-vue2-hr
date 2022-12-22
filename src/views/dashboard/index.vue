@@ -5,14 +5,17 @@
 </template>
 
 <script>
+import { getUserInfo } from '@/api/user'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'Dashboard',
   computed: {
-    ...mapGetters([
-      'name'
-    ])
+    ...mapGetters(['name'])
+  },
+  async created() {
+    const { data } = await getUserInfo()
+    console.log(data)
   }
 }
 </script>

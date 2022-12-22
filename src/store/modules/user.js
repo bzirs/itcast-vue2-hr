@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2021-05-10 09:38:15
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-21 11:12:01
+ * @LastEditTime: 2022-12-22 12:00:51
  * @FilePath: /hm-vue2-hr/src/store/modules/user.js
  * @Description:
  * @
@@ -12,15 +12,8 @@
 // import { getToken, setToken, removeToken } from '@/utils/auth'
 // import { resetRouter } from '@/router'
 
-// const getDefaultState = () => {
-//   return {
-//     token: getToken(),
-//     name: '',
-//     avatar: ''
-//   }
-// }
-
-// const state = getDefaultState()
+import { login as userLogin } from '@/api/user'
+import { getToken, setToken } from '@/utils/auth'
 
 // const mutations = {
 //   RESET_STATE: (state) => {
@@ -105,9 +98,37 @@
 //   actions
 // }
 
+const getUserState = _ => ({
+  token: getToken()
+})
+
+const mutations = {
+  updateToken(state, payload) {
+    state.token = payload
+    setToken(payload)
+  }
+}
+
+const actions = {
+  async login({ commit }, payload) {
+    try {
+      const { code, data, message } = await userLogin(payload)
+      console.log(code, data)
+
+      commit('updateToken', data)
+
+      return Promise.resolve(message)
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
+}
+
+const state = getUserState()
+
 export default {
   namespaced: true,
-  state: {},
-  mutations: {},
-  actions: {}
+  state,
+  mutations,
+  actions
 }
