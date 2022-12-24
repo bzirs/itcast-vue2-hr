@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2021-05-10 09:38:15
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-22 12:00:51
+ * @LastEditTime: 2022-12-24 17:36:35
  * @FilePath: /hm-vue2-hr/src/store/modules/user.js
  * @Description:
  * @
@@ -12,8 +12,8 @@
 // import { getToken, setToken, removeToken } from '@/utils/auth'
 // import { resetRouter } from '@/router'
 
-import { login as userLogin } from '@/api/user'
-import { getToken, setToken } from '@/utils/auth'
+import { getUserInfo, getUserOtherInfo, login as userLogin } from '@/api/user'
+import { getToken, removeToken, setToken } from '@/utils/auth'
 
 // const mutations = {
 //   RESET_STATE: (state) => {
@@ -99,17 +99,29 @@ import { getToken, setToken } from '@/utils/auth'
 // }
 
 const getUserState = _ => ({
-  token: getToken()
+  token: getToken(),
+  userInfo: {}
 })
 
 const mutations = {
+  // 更新token
   updateToken(state, payload) {
     state.token = payload
     setToken(payload)
+  },
+  // 更新用户信息
+  updateUserInfo(state, payload) {
+    state.userInfo = payload
+  },
+  updateLogout() {
+    removeToken()
+    state.token = null
+    state.userInfo = null
   }
 }
 
 const actions = {
+  // 用户登录
   async login({ commit }, payload) {
     try {
       const { code, data, message } = await userLogin(payload)
@@ -121,7 +133,20 @@ const actions = {
     } catch (error) {
       return Promise.reject(error)
     }
+  },
+  // 获取用户信息
+  async toGetUserInfo({ commit }, payload) {
+    const { data } = await getUserInfo()
+    const { data: otherData } = await getUserOtherInfo(data.userId)
+    commit('updateUserInfo', { ...data, ...otherData })
+  },
+  // 用户退出
+  async logout({ commit }) {
+    // removeToken()
+    commit('updateLogout')
+    // commit('updateUserInfo', {})
   }
+
 }
 
 const state = getUserState()

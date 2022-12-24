@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2021-05-10 09:38:15
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-21 17:03:48
+ * @LastEditTime: 2022-12-24 17:55:24
  * @FilePath: /hm-vue2-hr/src/main.js
  * @Description:
  * @

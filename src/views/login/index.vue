@@ -1,13 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form
-      ref="loginForm"
-      :model="loginForm"
-      :rules="loginRules"
-      class="login-form"
-      auto-complete="on"
-      label-position="left"
-    >
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
         <img src="@/assets/common/login-logo.png" alt="" class="title">
       </div>
@@ -16,46 +9,20 @@
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input
-          ref="mobile"
-          v-model="loginForm.mobile"
-          placeholder="请输入手机号"
-          name="mobile"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
+        <el-input ref="mobile" v-model="loginForm.mobile" placeholder="请输入手机号" name="mobile" type="text" tabindex="1" auto-complete="on" />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="请输入密码"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
+        <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType" placeholder="请输入密码" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon
-            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
-          />
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width: 100%; margin-bottom: 30px"
-        class="loginBtn"
-        @click.native.prevent="handleLogin"
-      >前进四!</el-button>
+      <el-button :loading="loading" type="primary" style="width: 100%; margin-bottom: 30px" class="loginBtn" @click.native.prevent="handleLogin">前进四!</el-button>
 
       <div class="tips">
         <span style="margin-right: 20px">账号: 13800000002</span>
@@ -91,12 +58,8 @@ export default {
         password: '123456'
       },
       loginRules: {
-        mobile: [
-          { required: true, trigger: 'blur', validator: validateMobile }
-        ],
-        password: [
-          { required: true, trigger: 'blur', validator: validatePassword }
-        ]
+        mobile: [{ required: true, trigger: 'blur', validator: validateMobile }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
       passwordType: 'password',
@@ -122,23 +85,32 @@ export default {
         this.$refs.password.focus()
       })
     },
+    async toLogin() {
+      try {
+        this.loading = true
+        await this.$store.dispatch('user/login', this.loginForm)
+
+        this.$message({
+          showClose: true,
+          message: '欢迎回家捏~master!',
+          type: 'success'
+        })
+
+        this.$router.push({ path: this.redirect || '/' })
+      } catch ({ message }) {
+        console.log(message)
+        this.loading = false
+
+        this.$message({
+          showClose: true,
+          message,
+          type: 'error'
+        })
+      }
+    },
     handleLogin() {
       this.$refs.loginForm.validate(async valid => {
-        if (valid) {
-          try {
-            this.loading = true
-            await this.$store.dispatch('user/login', this.loginForm)
-
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          } catch ({ message }) {
-            console.log(message)
-            this.loading = false
-          }
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+        valid && this.toLogin()
       })
     }
   }
