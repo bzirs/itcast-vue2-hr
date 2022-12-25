@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2021-05-10 09:38:15
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-24 17:36:35
+ * @LastEditTime: 2022-12-25 09:47:53
  * @FilePath: /hm-vue2-hr/src/store/modules/user.js
  * @Description:
  * @
@@ -116,7 +116,7 @@ const mutations = {
   updateLogout() {
     removeToken()
     state.token = null
-    state.userInfo = null
+    state.userInfo = {}
   }
 }
 

@@ -1,3 +1,13 @@
+<!--
+ * @Author: bzirs
+ * @Date: 2021-05-10 09:38:15
+ * @LastEditors: bzirs
+ * @LastEditTime: 2022-12-25 21:23:57
+ * @FilePath: /hm-vue2-hr/src/layout/components/Sidebar/index.vue
+ * @Description:
+ *
+ * Copyright (c) 2022 by bzirs, All Rights Reserved.
+-->
 <template>
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
@@ -11,6 +21,7 @@
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="vertical"
+        router
       >
         <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>

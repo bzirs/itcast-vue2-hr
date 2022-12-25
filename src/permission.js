@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2021-05-10 09:38:15
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-24 17:31:30
+ * @LastEditTime: 2022-12-25 09:46:57
  * @FilePath: /hm-vue2-hr/src/permission.js
  * @Description:
  * @
@@ -14,7 +14,7 @@ import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 // import { getToken } from '@/utils/auth' // get token from cookie
-// import getPageTitle from '@/utils/get-page-title'
+import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -26,8 +26,9 @@ router.beforeEach(async(to, from, next) => {
   const token = store.getters.token
   console.log(token)
   if (token) {
-    // 请求用户信息
-    store.dispatch('user/toGetUserInfo')
+    // 请求用户信息 判断vuex是否存在用户信息
+    console.log(store.getters.userInfo.userId)
+    store.getters.userId || store.dispatch('user/toGetUserInfo')
 
     if (to.path === '/login') {
       next('/')
@@ -43,6 +44,13 @@ router.beforeEach(async(to, from, next) => {
   }
 
   NProgress.done()
+})
+
+router.beforeEach((to, from, next) => {
+  // 动态设置标题
+  document.title = getPageTitle(to.meta.title)
+
+  next()
 })
 
 router.afterEach(() => {

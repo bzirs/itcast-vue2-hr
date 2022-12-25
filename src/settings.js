@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2021-05-10 09:38:15
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-24 11:29:21
+ * @LastEditTime: 2022-12-25 12:15:56
  * @FilePath: /hm-vue2-hr/src/settings.js
  * @Description:
  * @
@@ -10,7 +10,7 @@
  */
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: '人资管理',
 
   /**
    * @type {boolean} true | false
