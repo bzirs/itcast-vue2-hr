@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2022-12-25 10:24:15
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-25 17:55:34
+ * @LastEditTime: 2022-12-27 10:14:56
  * @FilePath: /hm-vue2-hr/src/views/departments/index.vue
  * @Description:
  *
@@ -40,6 +40,7 @@
 
         <!-- 架构 -->
         <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick">
+          <!--  eslint-disable-next-line vue/no-template-shadow -->
           <template v-slot="{ data }">
             <el-row type="flex" justify="space-between" align="middle" style="height: 40px; width: 100%;">
               <el-col :span="20">
@@ -76,6 +77,7 @@
 
 <script>
 import { getDepartmentList } from '@/api/departments'
+import { listTreeArray } from '@/utils'
 export default {
   name: 'DepartmentsPage',
   data() {
@@ -83,7 +85,7 @@ export default {
       data: [],
       defaultProps: {
         children: 'children',
-        label: 'label'
+        label: 'name'
       }
     }
   },
@@ -98,7 +100,7 @@ export default {
     async toGetDepartmentList() {
       const { data: { depts }} = await getDepartmentList()
       console.log(depts)
-      this.data = depts
+      this.data = listTreeArray(depts)
     }
 
   }

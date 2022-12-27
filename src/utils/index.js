@@ -115,3 +115,26 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+// 树状数组处理
+export function listTreeArray(arr) {
+  const newArr = []
+  const map = {}
+
+  arr.forEach(item => {
+    item.children = []
+    map[item.id] = item
+  })
+
+  arr.forEach(item => {
+    const pidItem = map[item.pid]
+
+    if (pidItem) {
+      pidItem.children.push(item)
+    } else {
+      newArr.push(item)
+    }
+  })
+
+  return newArr
+}
