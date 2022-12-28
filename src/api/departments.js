@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2022-12-25 17:45:14
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-27 16:51:59
+ * @LastEditTime: 2022-12-27 21:17:28
  * @FilePath: /hm-vue2-hr/src/api/departments.js
  * @Description:
  * @
@@ -24,3 +24,4 @@ export const getDepartmentInfo = id => request.get(`/company/department/${id}`)
 
 // 修改部门信息
 export const editDepartmentInfo = obj => request.put(`/company/department/${obj.id}`, obj)
+
