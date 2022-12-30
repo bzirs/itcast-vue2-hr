@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2022-12-27 10:52:52
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-28 10:20:23
+ * @LastEditTime: 2022-12-28 14:46:58
  * @FilePath: /hm-vue2-hr/src/views/departments/components/deptsDialog.vue
  * @Description:
  *
@@ -49,9 +49,52 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
+    },
+    originList: {
+      type: Array,
+      default: _ => ([])
     }
   },
   data() {
+    const customCheck = (rule, value, callback) => {
+      // console.log(rule, value)
+      // console.log(this.originList)
+      const fullField = rule.fullField
+
+      let arr = []
+      // 添加部门的name判断
+
+      // 编辑部门的name判断
+      if (this.isEdit) {
+        // 找到兄弟部门
+
+        // arr = this.originList.filter(item => item.pid === this.deptsId).map(item => item[fullField])
+        if (fullField === 'name') {
+          const pid = this.originList.find(item => item.id === this.deptsId).pid
+          console.log(pid)
+          fullField === 'name' && (arr = this.originList.filter(item => item.id !== this.deptsId && item.pid === pid).map(item => item[fullField]))
+        } else {
+          arr = this.originList.map(item => item[fullField])
+        }
+      } else {
+        if (fullField === 'name') {
+          // 找到子部门
+          console.log(1111)
+          arr = this.originList.filter(item => item.pid === this.deptsId).map(item => item[fullField])
+        } else {
+          arr = this.originList.map(item => item[fullField])
+        }
+      }
+
+      console.log(arr, this.deptsId)
+
+      this.isEdit && arr.splice(arr.indexOf(value), 1)
+
+      arr.includes(value) && callback(new Error(value + '已存在'))
+
+      callback()
+    }
+
     return {
       form: {
         name: '', // 部门名称
@@ -62,11 +105,14 @@ export default {
       formRules: {
         name: [
           { required: true, message: '部门名称不能为空', trigger: 'blur' },
-          { min: 1, max: 50, message: '部门名称要求1-50个字符', trigger: 'blur' }
+          { min: 1, max: 50, message: '部门名称要求1-50个字符', trigger: 'blur' },
+          { validator: customCheck, trigger: 'blur' }
         ],
         code: [
           { required: true, message: '部门编码不能为空', trigger: 'blur' },
-          { min: 1, max: 50, message: '部门编码要求1-50个字符', trigger: 'blur' }
+          { min: 1, max: 50, message: '部门编码要求1-50个字符', trigger: 'blur' },
+          { validator: customCheck, trigger: 'blur' }
+
         ],
         manager: [
           { required: true, message: '部门负责人不能为空', trigger: 'blur' }

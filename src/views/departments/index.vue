@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2022-12-25 10:24:15
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-27 19:56:35
+ * @LastEditTime: 2022-12-28 14:36:17
  * @FilePath: /hm-vue2-hr/src/views/departments/index.vue
  * @Description:
  *
@@ -76,7 +76,7 @@
 
     <!-- 弹框 -->
     <el-dialog title="提示" :visible.sync="dialogVisible" :close-on-press-escape="false" width="30%" :before-close="handleClose" :close-on-click-modal="false">
-      <depts-dialog v-if="dialogVisible" :is-edit.sync="isEdit" :depts-id.sync="deptsId" :show.sync="dialogVisible" @resetGetInfo="toGetDepartmentList" />
+      <depts-dialog v-if="dialogVisible" :origin-list="originList" :is-edit.sync="isEdit" :depts-id.sync="deptsId" :show.sync="dialogVisible" @resetGetInfo="toGetDepartmentList" />
     </el-dialog>
   </div>
 </template>
@@ -103,7 +103,10 @@ export default {
       deptsId: '',
 
       // 是否是编辑部门
-      isEdit: false
+      isEdit: false,
+
+      // 处理后的数组
+      originList: []
     }
   },
   async created() {
@@ -115,12 +118,10 @@ export default {
       console.log(obj, node, data)
     },
     // 关闭弹框
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {})
+    async handleClose(done) {
+      await this.$confirm('确认关闭？')
+      done()
+      this.isEdit = false
     },
     // 删除部门
     async handleRemove(id) {
@@ -157,6 +158,9 @@ export default {
       const {
         data: { depts }
       } = await getDepartmentList()
+
+      this.originList = depts.map(({ id, pid, code, name }) => ({ id, pid, code, name }))
+
       this.data = listTreeArray(depts)
     },
     // 打开弹出框
