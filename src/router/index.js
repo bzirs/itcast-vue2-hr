@@ -65,12 +65,20 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: '主页', icon: 'dashboard' }
-    }]
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: '主页', icon: 'dashboard' }
+      },
+      {
+        path: 'import',
+        name: 'import',
+        component: () => import('@/views/employees/components/import.vue'),
+        hidden: true
+      }
+    ]
   },
 
   // 404 page must be placed at the end !!!

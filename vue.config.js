@@ -39,7 +39,9 @@ module.exports = {
     proxy: {
       '/api': {
         // target: 'http://192.168.81.246:3000'
-        target: 'http://ihrm-java.itheima.net'
+        // target: 'http://ihrm-java.itheima.net'
+        target: 'https://ihrm.api.iuiun.com'
+
       }
     }
   },

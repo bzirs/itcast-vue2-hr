@@ -25,3 +25,15 @@ export const getUserOtherInfo = id => request.get(`/sys/user/${id}`)
 export function logout() {
   return
 }
+
+/**
+ * @description: 获取用某个用户的信息
+ * @param {*} id
+ * @return {*}
+ */
+export function getUserDetailById(id) {
+  return request({
+    url: `/sys/user/${id}`
+  })
+}
+

@@ -2,7 +2,7 @@
  * @Author: bzirs
  * @Date: 2022-12-28 16:21:08
  * @LastEditors: bzirs
- * @LastEditTime: 2022-12-28 18:07:40
+ * @LastEditTime: 2022-12-30 09:21:16
  * @FilePath: /hm-vue2-hr/src/api/settings.js
  * @Description:
  * @
@@ -21,7 +21,7 @@ export function getRoles(params) {
   return request({
     url: '/sys/role',
     method: 'GET',
-    'params': params
+    params
   })
 }
 
@@ -34,5 +34,31 @@ export function deleteRole(id) {
   return request({
     url: `/sys/role/${id}`,
     method: 'delete'
+  })
+}
+
+/**
+ * @description: 新增角色
+ * @param {*} data {name,description}
+ * @return {*}
+ */
+export function addRole(data) {
+  return request({
+    url: '/sys/role',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description: 编辑角色
+ * @param {*} data
+ * @return {*}
+ */
+export function updateRole(data) {
+  return request({
+    url: `/sys/role/${data.id}`,
+    method: 'put',
+    data
   })
 }
