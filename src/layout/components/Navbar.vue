@@ -6,15 +6,18 @@
       @toggleClick="toggleSideBar"
     />
     <div class="app-breadcrumb">
-      江苏传智播客教育科技股份有限公司
+      {{ $t('company') }}
       <span class="breadBtn">体验版</span>
     </div>
 
     <div class="right-menu">
+      <ScreenFull class="screen" />
+      <lang />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <!-- <img src="@/assets/common/bigUserHeader.png" class="user-avatar"> -->
-          <img :src="$store.getters.avatar" class="user-avatar">
+          <img v-if="$store.getters.avatar" :src="$store.getters.avatar" class="user-avatar">
+          <img v-else :src="avatarImg" class="user-avatar">
           <span class="name"> {{ $store.getters.name }} </span>
           <i class="el-icon-caret-bottom" style="color: #fff" />
         </div>
@@ -38,10 +41,16 @@
 import { mapGetters } from 'vuex'
 
 import Hamburger from '@/components/Hamburger'
+import avatarImg from '@/assets/common/bigUserHeader.png'
 
 export default {
   components: {
     Hamburger
+  },
+  data() {
+    return {
+      avatarImg
+    }
   },
   computed: {
     ...mapGetters(['sidebar', 'avatar'])
@@ -161,5 +170,14 @@ export default {
       }
     }
   }
+}
+</style>
+
+<style>
+.right-menu-item {
+  vertical-align: middle;
+}
+.screen{
+  padding-right: 15px;
 }
 </style>

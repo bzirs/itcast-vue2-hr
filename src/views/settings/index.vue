@@ -26,7 +26,7 @@
               <el-table-column prop="description" label="描述" />
               <el-table-column label="操作">
                 <template v-slot="{row}">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="success" @click="hAssign(row.id)">分配权限</el-button>
                   <el-button size="small" type="primary" @click="hEdit(row)">编辑</el-button>
                   <el-button size="small" type="danger" @click="hDel(row.id)">删除</el-button>
                 </template>
@@ -64,15 +64,22 @@
           </el-col>
         </el-row>
       </el-dialog>
-    </div>
+      <!-- 分配权限的弹层 -->
+      <el-dialog title="分配权限(一级为路由页面查看权限-二级为按钮操作权限)" :visible.sync="showDialogAssign">
+        <assign-permission :id="id" :show.sync="showDialogAssign" />
+      </el-dialog></div>
   </div>
 </template>
 
 <script>
 import { getRoles, deleteRole, addRole, updateRole } from '@/api/settings'
+import assignPermission from './components/assignPermission.vue'
+
 export default {
+  components: { assignPermission },
   data() {
     return {
+      showDialogAssign: false, // 分配权限对话框
       roles: [],
       pageParams: {
         page: 1, // 查询第一页
@@ -87,7 +94,8 @@ export default {
       rules: {
         name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }]
       },
-      isEdit: false // 是否是编辑
+      isEdit: false, // 是否是编辑
+      id: ''
     }
   },
   computed: {
@@ -99,6 +107,10 @@ export default {
     this.loadRoles()
   },
   methods: {
+    hAssign(id) {
+      this.id = id
+      this.showDialogAssign = true
+    },
     hEdit({ id, name, description }) {
       // 1. 把当前的数据直接给表单
       // this.roleForm = row

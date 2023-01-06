@@ -7,7 +7,7 @@
         </template>
         <template #right>
           <el-button type="warning" size="small" @click="$router.push('/import')">excel导入</el-button>
-          <el-button type="danger" size="small" @click="handleDownload">excel导出</el-button>
+          <el-button v-allow="'export-excel'" type="danger" size="small" @click="handleDownload">excel导出</el-button>
           <el-button type="primary" size="small" @click.native="addClick">新增员工</el-button>
         </template>
       </page-tools>
@@ -18,7 +18,8 @@
           <el-table-column label="姓名" prop="username" />
           <el-table-column label="头像" prop="staffPhoto">
             <template v-slot="{ row }">
-              <img :src="row.staffPhoto" style="width: 60px;" alt="">
+              <img v-if="row.staffPhoto" :src="row.staffPhoto" style="width: 60px;" alt="">
+              <img v-else :src="avatarImg" style="width: 60px;" alt="">
             </template>
           </el-table-column>
           <el-table-column label="工号" prop="workNumber" />
@@ -60,8 +61,8 @@
     </el-dialog>
 
     <!-- 分配角色弹框 -->
-    <el-dialog :visible.sync="showDialogRole" title="123">
-      <assign-role />
+    <el-dialog :visible.sync="showDialogRole" title="角色分配">
+      <assign-role v-if="showDialogRole" :id="roleId" ref="assign" :show.sync="showDialogRole" />
     </el-dialog>
   </div>
 </template>
@@ -71,6 +72,8 @@ import { deleteUser, getEmployeeList } from '@/api/employees'
 import employees from '@/constant/employees'
 import empDialog from '@/views/employees/components/empDialog.vue'
 import AssignRole from './components/assignRole.vue'
+import avatarImg from '@/assets/common/bigUserHeader.png'
+
 export default {
 
   components: {
@@ -79,6 +82,7 @@ export default {
 
   data() {
     return {
+      avatarImg,
       list: [],
       total: 0,
 
@@ -92,7 +96,8 @@ export default {
         size: 5
 
       },
-      showDialogRole: false
+      showDialogRole: false,
+      roleId: ''
     }
   },
   watch: {
@@ -107,8 +112,11 @@ export default {
     this.loadEmployeeList()
   },
   methods: {
-    distributionRole(id) {
+    async distributionRole(id) {
       this.showDialogRole = true
+      // await this.$refs.assign.getRoleList()
+      // await this.$refs.assign.loadUserDetailById()
+      this.roleId = id
     },
     // 导出
     handleDownload() {

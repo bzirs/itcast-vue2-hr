@@ -8,7 +8,7 @@
  * @
  * @Copyright (c) 2022 by bzirs, All Rights Reserved.
  */
-import router from './router'
+import router, { asyncRoutes } from './router'
 import store from './store'
 // import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
@@ -28,7 +28,17 @@ router.beforeEach(async(to, from, next) => {
   if (token) {
     // 请求用户信息 判断vuex是否存在用户信息
     console.log(store.getters.userInfo.userId)
-    store.getters.userId || store.dispatch('user/toGetUserInfo')
+
+    if (!store.getters.userId) {
+      const { menus } = await store.dispatch('user/toGetUserInfo')
+      console.log(asyncRoutes)
+      const arr = await asyncRoutes.filter(t => menus.includes(t.children[0].name))
+      arr.push({ path: '*', redirect: '/404', hidden: true })
+      router.addRoutes(arr)
+
+      store.commit('menu/updateMenuList', arr)
+      next(arr.includes(to.path) ? to.path : '/')
+    }
 
     if (to.path === '/login') {
       next('/')
